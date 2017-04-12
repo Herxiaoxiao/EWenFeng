@@ -15,9 +15,7 @@ import me.yokeyword.fragmentation.SupportFragment;
 
 import java.util.ArrayList;
 
-/**
- * Created by YoKeyword on 16/2/4.
- */
+
 public class ShopFragment extends BaseFragment {
     public static final String TAG = ShopFragment.class.getSimpleName();
 

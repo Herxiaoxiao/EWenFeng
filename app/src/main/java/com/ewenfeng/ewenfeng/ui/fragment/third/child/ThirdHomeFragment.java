@@ -1,63 +1,59 @@
-package com.ewenfeng.ewenfeng.ui.fragment.first.child;
+package com.ewenfeng.ewenfeng.ui.fragment.third.child;
 
-import android.os.Build;
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Fade;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 import com.ewenfeng.ewenfeng.MainActivity;
 import com.ewenfeng.ewenfeng.R;
-import com.ewenfeng.ewenfeng.adapter.FirstHomeAdapter;
+import com.ewenfeng.ewenfeng.adapter.HomeAdapter;
 import com.ewenfeng.ewenfeng.base.BaseFragment;
 import com.ewenfeng.ewenfeng.entity.Article;
 import com.ewenfeng.ewenfeng.event.TabSelectedEvent;
-import com.ewenfeng.ewenfeng.helper.DetailTransition;
 import com.ewenfeng.ewenfeng.listener.OnItemClickListener;
+import com.ewenfeng.ewenfeng.ui.fragment.second.child.DetailFragment;
+import me.yokeyword.fragmentation.SupportFragment;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
+public class ThirdHomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
 
-
-public class FirstHomeFragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
     private Toolbar mToolbar;
     private RecyclerView mRecy;
     private SwipeRefreshLayout mRefreshLayout;
-    private FloatingActionButton mFab;
 
-    private FirstHomeAdapter mAdapter;
+    private HomeAdapter mAdapter;
 
-    private boolean mInAtTop = true;
+    private boolean mAtTop = true;
+
     private int mScrollTotal;
 
     private String[] mTitles = new String[]{
-            "Skype更新增加支持Touch Bar.",
-            "《最强大脑4》为高收视率黑幕不断 选手们接连退赛备受打击.",
-            "马来西亚非政府组织前往朝驻马使馆和平抗议.",
-            "这辆车抗住了近十吨钢筋压顶车没变形，交警看了都竖拇指.",
-            "LOL小智曝惊人内幕 主播挣那么多都是假的？"
+            "航拍“摩托大军”返乡高峰 如蚂蚁搬家（组图）",
+            "苹果因漏电召回部分电源插头",
+            "IS宣称对叙利亚爆炸案负责"
     };
 
-    private int[] mImgRes = new int[]{
-            R.drawable.bg_first, R.drawable.bg_second, R.drawable.bg_third, R.drawable.bg_fourth, R.drawable.bg_fifth
+    private String[] mContents = new String[]{
+            "1月30日，距离春节还有不到十天，“摩托大军”返乡高峰到来。航拍广西梧州市东出口服务站附近的骑行返乡人员，如同蚂蚁搬家一般。",
+            "昨天记者了解到，苹果公司在其官网发出交流电源插头转换器更换计划，召回部分可能存在漏电风险的电源插头。",
+            "极端组织“伊斯兰国”31日在社交媒体上宣称，该组织制造了当天在叙利亚首都大马士革发生的连环爆炸案。"
     };
 
-
-    public static FirstHomeFragment newInstance() {
+    public static ThirdHomeFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        FirstHomeFragment fragment = new FirstHomeFragment();
+        ThirdHomeFragment fragment = new ThirdHomeFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,8 +61,8 @@ public class FirstHomeFragment extends BaseFragment implements SwipeRefreshLayou
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.zhihu_fragment_first_home, container, false);
-        EventBus.getDefault().register(this);   //订阅注册
+        View view = inflater.inflate(R.layout.zhihu_fragment_third_home, container, false);
+        EventBus.getDefault().register(this);
         initView(view);
         return view;
     }
@@ -75,14 +71,13 @@ public class FirstHomeFragment extends BaseFragment implements SwipeRefreshLayou
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
         mRecy = (RecyclerView) view.findViewById(R.id.recy);
         mRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh_layout);
-        mFab = (FloatingActionButton) view.findViewById(R.id.fab);
 
-        mToolbar.setTitle("首页");
+        mToolbar.setTitle("娱乐");
 
         mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mRefreshLayout.setOnRefreshListener(this);
 
-        mAdapter = new FirstHomeAdapter(_mActivity);
+        mAdapter = new HomeAdapter(_mActivity);
         LinearLayoutManager manager = new LinearLayoutManager(_mActivity);
         mRecy.setLayoutManager(manager);
         mRecy.setAdapter(mAdapter);
@@ -90,32 +85,17 @@ public class FirstHomeFragment extends BaseFragment implements SwipeRefreshLayou
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(int position, View view, RecyclerView.ViewHolder vh) {
-                FirstDetailFragment fragment = FirstDetailFragment.newInstance(mAdapter.getItem(position));
-
-                // 这里是使用SharedElement的用例
-                // LOLLIPOP(5.0)系统的 SharedElement支持有 系统BUG， 这里判断大于 > LOLLIPOP
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-                    setExitTransition(new Fade());
-                    fragment.setEnterTransition(new Fade());
-                    fragment.setSharedElementReturnTransition(new DetailTransition());
-                    fragment.setSharedElementEnterTransition(new DetailTransition());
-
-                    // 25.1.0以下的support包,Material过渡动画只有在进栈时有,返回时没有;
-                    // 25.1.0+的support包，SharedElement正常
-                    fragment.transaction()
-                            .addSharedElement(((FirstHomeAdapter.VH) vh).img, getString(R.string.image_transition))
-                            .addSharedElement(((FirstHomeAdapter.VH) vh).tvTitle, "tv")
-                            .commit();
-                }
-                start(fragment);
+                // 这里的DetailFragment在flow包里
+                // 这里是父Fragment启动,要注意 栈层级
+                ((SupportFragment) getParentFragment()).start(DetailFragment.newInstance(mAdapter.getItem(position).getTitle()));
             }
         });
 
         // Init Datas
         List<Article> articleList = new ArrayList<>();
         for (int i = 0; i < 15; i++) {
-            int index = i % 5;
-            Article article = new Article(mTitles[index], mImgRes[index]);
+            int index = (int) (Math.random() * 3);
+            Article article = new Article(mTitles[index], mContents[index]);
             articleList.add(article);
         }
         mAdapter.setDatas(articleList);
@@ -126,23 +106,10 @@ public class FirstHomeFragment extends BaseFragment implements SwipeRefreshLayou
                 super.onScrolled(recyclerView, dx, dy);
                 mScrollTotal += dy;
                 if (mScrollTotal <= 0) {
-                    mInAtTop = true;
+                    mAtTop = true;
                 } else {
-                    mInAtTop = false;
+                    mAtTop = false;
                 }
-                if (dy > 5) {
-                    //mFab.hide();
-                    //mToolbar.
-                } else if (dy < -5) {
-                    //mFab.show();
-                }
-            }
-        });
-
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(_mActivity, "Action", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -166,9 +133,9 @@ public class FirstHomeFragment extends BaseFragment implements SwipeRefreshLayou
      */
     @Subscribe
     public void onTabSelectedEvent(TabSelectedEvent event) {
-        if (event.position != MainActivity.FIRST) return;
+        if (event.position != MainActivity.SECOND) return;
 
-        if (mInAtTop) {
+        if (mAtTop) {
             mRefreshLayout.setRefreshing(true);
             onRefresh();
         } else {
@@ -182,4 +149,5 @@ public class FirstHomeFragment extends BaseFragment implements SwipeRefreshLayou
         mRecy.setAdapter(null);
         EventBus.getDefault().unregister(this);
     }
+
 }

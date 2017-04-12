@@ -9,9 +9,7 @@ import com.ewenfeng.ewenfeng.R;
 import com.ewenfeng.ewenfeng.base.BaseMainFragment;
 import com.ewenfeng.ewenfeng.ui.fragment.second.child.ViewPagerFragment;
 
-/**
- * Created by YoKeyword on 16/6/3.
- */
+
 public class ZhihuSecondFragment extends BaseMainFragment {
 
     public static ZhihuSecondFragment newInstance() {

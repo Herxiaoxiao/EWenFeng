@@ -11,9 +11,7 @@ import com.ewenfeng.ewenfeng.R;
 import com.ewenfeng.ewenfeng.adapter.ZhihuPagerFragmentAdapter;
 import com.ewenfeng.ewenfeng.base.BaseFragment;
 
-/**
- * Created by YoKeyword on 16/6/5.
- */
+
 public class ViewPagerFragment extends BaseFragment {
     private TabLayout mTab;
     private ViewPager mViewPager;

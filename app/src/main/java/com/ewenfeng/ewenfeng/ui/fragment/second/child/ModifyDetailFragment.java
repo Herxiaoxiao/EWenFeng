@@ -13,9 +13,7 @@ import com.ewenfeng.ewenfeng.R;
 import com.ewenfeng.ewenfeng.base.BaseBackFragment;
 import com.ewenfeng.ewenfeng.ui.fragment.CycleFragment;
 
-/**
- * Created by YoKeyword on 16/2/7.
- */
+
 public class ModifyDetailFragment extends BaseBackFragment {
     private static final String ARG_TITLE = "arg_title";
 

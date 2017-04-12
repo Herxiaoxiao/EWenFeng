@@ -11,10 +11,7 @@ import android.widget.TextView;
 import com.example.herxiaoxiao.firstideaproject.R;
 import com.example.herxiaoxiao.firstideaproject.demo_flow.base.BaseFragment;
 
-*/
-/**
- * Created by YoKeyword on 16/6/5.
- *//*
+
 
 public class OtherPagerFragment extends BaseFragment {
     private static final String ARG_TYPE = "arg_pos";
