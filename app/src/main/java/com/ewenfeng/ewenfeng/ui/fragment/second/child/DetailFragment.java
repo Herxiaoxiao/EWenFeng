@@ -1,16 +1,22 @@
 package com.ewenfeng.ewenfeng.ui.fragment.second.child;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.ewenfeng.ewenfeng.MainActivity;
 import com.ewenfeng.ewenfeng.R;
 import com.ewenfeng.ewenfeng.base.BaseBackFragment;
+import com.ewenfeng.ewenfeng.m_interface.HideMainBottomBar;
 
 
 public class DetailFragment extends BaseBackFragment {
@@ -20,16 +26,21 @@ public class DetailFragment extends BaseBackFragment {
 
     static final String KEY_RESULT_TITLE = "title";
 
-    private Toolbar mToolbar;
+    //private Toolbar mToolbar;
     private TextView mTvContent;
-    private FloatingActionButton mFab;
-    private String mTitle;
+    //private FloatingActionButton mFab;
+    //private String mTitle;
+    private ImageView back_bt,comment_bt,collection_bt,share_bt;
+    private TextView commentNumber;
+    private EditText commentcontent;
+
 
     public static DetailFragment newInstance(String title) {
         DetailFragment fragment = new DetailFragment();
         Bundle bundle = new Bundle();
         bundle.putString(ARG_TITLE, title);
         fragment.setArguments(bundle);
+
         return fragment;
     }
 
@@ -39,7 +50,7 @@ public class DetailFragment extends BaseBackFragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mTitle = bundle.getString(ARG_TITLE);
+           // mTitle = bundle.getString(ARG_TITLE);
         }
     }
 
@@ -47,19 +58,35 @@ public class DetailFragment extends BaseBackFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
+
         initView(view);
 
         return view;
     }
 
     private void initView(View view) {
-        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mFab = (FloatingActionButton) view.findViewById(R.id.fab);
+        //mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        //mFab = (FloatingActionButton) view.findViewById(R.id.fab);
         mTvContent = (TextView) view.findViewById(R.id.tv_content);
+        back_bt = (ImageView)view.findViewById(R.id.comment_back);
+        comment_bt =(ImageView)view.findViewById(R.id.comment_number_image);
+        collection_bt =(ImageView)view.findViewById(R.id.news_collection_image);
+        share_bt = (ImageView)view.findViewById(R.id.share_image);
 
-        mToolbar.setTitle(mTitle);
+        final MainActivity main = (MainActivity) getActivity();
 
-        initToolbarNav(mToolbar);
+        back_bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("getActivity", "/"+getActivity().getClass().getName()+"/");
+                main.onHiddenBottombarEvent(false);
+                _mActivity.onBackPressed();
+            }
+        });
+
+        //mToolbar.setTitle(mTitle);
+
+        //initToolbarNav(mToolbar); onHiddenBottombarEvent
     }
 
     /**
@@ -77,22 +104,22 @@ public class DetailFragment extends BaseBackFragment {
     private void initDelayView() {
         mTvContent.setText(R.string.large_text);
 
-        mFab.setOnClickListener(new View.OnClickListener() {
+        /*mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startForResult(ModifyDetailFragment.newInstance(mTitle), REQ_MODIFY_FRAGMENT);
             }
-        });
+        });*/
     }
 
     @Override
     public void onFragmentResult(int requestCode, int resultCode, Bundle data) {
         super.onFragmentResult(requestCode, resultCode, data);
         if (requestCode == REQ_MODIFY_FRAGMENT && resultCode == RESULT_OK && data != null) {
-            mTitle = data.getString(KEY_RESULT_TITLE);
-            mToolbar.setTitle(mTitle);
+            //mTitle = data.getString(KEY_RESULT_TITLE);
+            //mToolbar.setTitle(mTitle);
             // 保存被改变的 title
-            getArguments().putString(ARG_TITLE, mTitle);
+            //getArguments().putString(ARG_TITLE, mTitle);
             Toast.makeText(_mActivity, "修改标题成功!", Toast.LENGTH_SHORT).show();
         }
     }

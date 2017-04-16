@@ -14,9 +14,7 @@ import com.ewenfeng.ewenfeng.listener.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by YoKeyword on 16/2/10.
- */
+
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MyViewHolder> {
     private LayoutInflater mInflater;
     private Context mContext;

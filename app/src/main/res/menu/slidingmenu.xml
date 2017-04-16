@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/g1" android:checkableBehavior="single">
+        <item
+                android:id="@+id/collection_button"
+                android:icon="@mipmap/icon_collection"
+                android:title="收藏"/>
+        <item
+                android:id="@+id/comment_button"
+                android:icon="@mipmap/icon_comment"
+                android:title="评论"/>
+        <item
+                android:id="@+id/message_button"
+                android:icon="@mipmap/icon_message"
+                android:title="消息"/>
+    </group>
+    <group android:id="@+id/g2" android:checkableBehavior="single">
+        <item
+                android:id="@+id/night"
+                android:icon="@mipmap/ic_launcher"
+                android:title="夜间模式"/>
+        <item
+                android:id="@+id/nopicture"
+                android:icon="@mipmap/icon_message"
+                android:title="无图模式"/>
+    </group>
+
+    <group android:id="@+id/g3" android:checkableBehavior="single">
+        <item
+                android:id="@+id/outline"
+                android:icon="@mipmap/ic_launcher"
+                android:title="离线阅读"/>
+    </group>
+
+    <item
+            android:checkableBehavior="single"
+            android:id="@+id/setting"
+            android:icon="@mipmap/ic_launcher"
+            android:title="设置"/>
+</menu>

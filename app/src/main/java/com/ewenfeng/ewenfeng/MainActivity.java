@@ -1,10 +1,20 @@
 package com.ewenfeng.ewenfeng;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.support.design.widget.NavigationView;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import com.ewenfeng.ewenfeng.base.BaseMainFragment;
 import com.ewenfeng.ewenfeng.event.TabSelectedEvent;
+import com.ewenfeng.ewenfeng.m_interface.HideMainBottomBar;
 import com.ewenfeng.ewenfeng.ui.fragment.first.ZhihuFirstFragment;
 import com.ewenfeng.ewenfeng.ui.fragment.first.child.FirstHomeFragment;
 import com.ewenfeng.ewenfeng.ui.fragment.fourth.ZhihuFourthFragment;
@@ -20,6 +30,8 @@ import me.yokeyword.fragmentation.SupportFragment;
 import me.yokeyword.fragmentation.anim.FragmentAnimator;
 import me.yokeyword.fragmentation.helper.FragmentLifecycleCallbacks;
 import org.greenrobot.eventbus.EventBus;
+import android.view.Gravity;
+import org.greenrobot.eventbus.Subscribe;
 
 
 public class MainActivity extends SupportActivity implements BaseMainFragment.OnBackToFirstListener {
@@ -29,8 +41,12 @@ public class MainActivity extends SupportActivity implements BaseMainFragment.On
     public static final int FOURTH = 3;
 
     private SupportFragment[] mFragments = new SupportFragment[4];
-
     private BottomBar mBottomBar;
+    //侧滑栏
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private ImageView bottomBar_image;
+    private FrameLayout fl;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +76,7 @@ public class MainActivity extends SupportActivity implements BaseMainFragment.On
         }
 
         initView();
+        initSlidingMenu();
 
 
         // 可以监听该Activity下的所有Fragment的18个 生命周期方法
@@ -79,6 +96,8 @@ public class MainActivity extends SupportActivity implements BaseMainFragment.On
 
     private void initView() {
         mBottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar_image = (ImageView) findViewById(R.id.bottomBar_image);
+        fl = (FrameLayout)findViewById(R.id.fl_container);
 
         mBottomBar.addItem(new BottomBarTab(this, R.drawable.ic_home_white_24dp))
                 .addItem(new BottomBarTab(this, R.drawable.ic_discover_white_24dp))
@@ -126,6 +145,44 @@ public class MainActivity extends SupportActivity implements BaseMainFragment.On
         });
     }
 
+    public void initSlidingMenu(){
+
+        drawerLayout = (DrawerLayout)findViewById(R.id.slidingmenu);
+        navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.setItemIconTintList(null);
+
+        //获取头布局文件
+        View headerView = navigationView.getHeaderView(0);
+
+        //item 设置监听
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.collection_button:
+                        //item.setChecked(true);
+                        break;
+                    case R.id.comment_button:
+                        //item.setChecked(true);
+                        break;
+                    case R.id.message_button:
+                        break;
+                    case R.id.night:
+                        break;
+                    case R.id.nopicture:
+                        break;
+                    case R.id.outline:
+                        break;
+                    case R.id.setting:
+                        break;
+                }
+                drawerLayout.closeDrawer(Gravity.LEFT);
+                return false;
+            }
+        });
+    }
+
     @Override
     public void onBackPressedSupport() {
         // 对于 4个类别的主Fragment内的回退back逻辑,已经在其onBackPressedSupport里各自处理了
@@ -140,17 +197,48 @@ public class MainActivity extends SupportActivity implements BaseMainFragment.On
     /**
      * 这里暂没实现,忽略
      */
-//    @Subscribe
-//    public void onHiddenBottombarEvent(boolean hidden) {
-//        if (hidden) {
-//            mBottomBar.hide();
-//        } else {
-//            mBottomBar.show();
-//        }
-//    }
+    public void onHiddenBottombarEvent(boolean hidden) {
+        if (hidden) {
+            mBottomBar.hide();
+            bottomBar_image.setVisibility(View.GONE);
+            setBottomMargin(0);
+        } else {
+            bottomBar_image.setVisibility(View.VISIBLE);
+            setBottomMargin(48);
+            mBottomBar.show();
+        }
+    }
+    public void setBottomMargin(int h){
+        FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) fl.getLayoutParams();
+        Log.i("debug", "before/"+lp.bottomMargin+"/");
+        lp.bottomMargin=dip2px(this,h);
+        fl.setLayoutParams(lp);
+        Log.i("debug", "after/"+lp.bottomMargin+"/");
+    }
+
+
+    /**
+     * 根据手机的分辨率从 dp 的单位 转成为 px(像素)
+     */
+    public static int dip2px(Context context, float dpValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dpValue * scale + 0.5f);
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
 //        EventBus.getDefault().unregister(this);
     }
+
+/*    @Override
+    public void HideBottomBar() {
+        mBottomBar.hide();
+    }
+
+    @Override
+    public void ShowBottomBar() {
+        mBottomBar.show();
+    }*/
 }

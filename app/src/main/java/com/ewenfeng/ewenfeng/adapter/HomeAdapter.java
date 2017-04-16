@@ -2,6 +2,7 @@ package com.ewenfeng.ewenfeng.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +14,7 @@ import com.ewenfeng.ewenfeng.listener.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * 主页HomeFragment  Adapter
- * Created by YoKeyword on 16/2/1.
- */
+
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
     private List<Article> mItems = new ArrayList<>();
     private LayoutInflater mInflater;
@@ -69,6 +67,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
         public MyViewHolder(View itemView) {
             super(itemView);
+
+            //Log.i("test","/"+itemView.getId()+"/");
+
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
             tvContent = (TextView) itemView.findViewById(R.id.tv_content);
         }
@@ -77,4 +78,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
     public void setOnItemClickListener(OnItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
+
+
 }

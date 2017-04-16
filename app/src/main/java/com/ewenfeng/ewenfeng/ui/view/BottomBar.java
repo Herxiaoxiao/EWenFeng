@@ -173,10 +173,23 @@ public class BottomBar extends LinearLayout {
         return mVisible;
     }
 
+    public int getHight(){
+        return getHeight();
+    }
+    public void setHight(int h){
+       /* ViewGroup.LayoutParams lp;
+        lp= mTabLayout.getLayoutParams();*/
+        //lp.width=400;
+        mTabParams.height=h;
+        mTabLayout.setLayoutParams(mTabParams);
+
+    }
+
     private void toggle(final boolean visible, final boolean animate, boolean force) {
         if (mVisible != visible || force) {
             mVisible = visible;
             int height = getHeight();
+
             if (height == 0 && !force) {
                 ViewTreeObserver vto = getViewTreeObserver();
                 if (vto.isAlive()) {

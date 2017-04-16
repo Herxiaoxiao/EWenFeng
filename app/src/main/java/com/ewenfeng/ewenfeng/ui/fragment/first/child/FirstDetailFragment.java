@@ -60,11 +60,11 @@ public class FirstDetailFragment extends BaseBackFragment {
         mImgDetail.setImageResource(mArticle.getImgRes());
         mTvTitle.setText(mArticle.getTitle());
 
-        mFab.setOnClickListener(new View.OnClickListener() {
+        /*mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 start(CycleFragment.newInstance(1));
             }
-        });
+        });*/
     }
 }

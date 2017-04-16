@@ -25,7 +25,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:support-v4:25.+'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 
     compile 'me.yokeyword:fragmentation:0.10.1'
     compile 'me.yokeyword:fragmentation-swipeback:0.7.9'

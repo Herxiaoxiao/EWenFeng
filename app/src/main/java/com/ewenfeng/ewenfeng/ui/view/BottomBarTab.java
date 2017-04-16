@@ -12,9 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import com.ewenfeng.ewenfeng.R;
 
-/**
- * Created by YoKeyword on 16/6/3.  Error inflating class me.yokeyword.sample.demo_zhihu.ui.view.BottomBar
- */
+
 public class BottomBarTab extends FrameLayout {
     private ImageView mIcon;
     private Context mContext;

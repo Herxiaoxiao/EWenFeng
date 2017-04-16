@@ -5,16 +5,21 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 import com.ewenfeng.ewenfeng.MainActivity;
 import com.ewenfeng.ewenfeng.R;
 import com.ewenfeng.ewenfeng.adapter.HomeAdapter;
+import com.ewenfeng.ewenfeng.adapter.HomeAdapterForSearch;
 import com.ewenfeng.ewenfeng.base.BaseFragment;
 import com.ewenfeng.ewenfeng.entity.Article;
 import com.ewenfeng.ewenfeng.event.TabSelectedEvent;
 import com.ewenfeng.ewenfeng.listener.OnItemClickListener;
+import com.ewenfeng.ewenfeng.listener.OnItemTouchListener;
+import com.ewenfeng.ewenfeng.ui.fragment.search.Search;
 import com.ewenfeng.ewenfeng.ui.fragment.second.child.DetailFragment;
 import me.yokeyword.fragmentation.SupportFragment;
 import org.greenrobot.eventbus.EventBus;
@@ -28,7 +33,7 @@ public class FirstPagerFragment extends BaseFragment implements SwipeRefreshLayo
     private RecyclerView mRecy;
     private SwipeRefreshLayout mRefreshLayout;
 
-    private HomeAdapter mAdapter;
+    private HomeAdapterForSearch mAdapter;
 
     private boolean mAtTop = true;
 
@@ -71,17 +76,23 @@ public class FirstPagerFragment extends BaseFragment implements SwipeRefreshLayo
         mRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         mRefreshLayout.setOnRefreshListener(this);
 
-        mAdapter = new HomeAdapter(_mActivity);
+        mAdapter = new HomeAdapterForSearch(_mActivity);
         LinearLayoutManager manager = new LinearLayoutManager(_mActivity);
         mRecy.setLayoutManager(manager);
         mRecy.setAdapter(mAdapter);
-
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+        mRecy.addOnItemTouchListener(new OnItemTouchListener(mRecy){
             @Override
-            public void onItemClick(int position, View view, RecyclerView.ViewHolder vh) {
-                // 这里的DetailFragment在flow包里
-                // 这里是父Fragment启动,要注意 栈层级
-                ((SupportFragment) getParentFragment()).start(DetailFragment.newInstance(mAdapter.getItem(position).getTitle()));
+            public void onItemClick(RecyclerView.ViewHolder vh) {
+                Log.i("bug_msg", "onItemClick: /"+vh.getAdapterPosition()+"/");
+                //Toast.makeText(_mActivity, "onItemClick: /"+vh.getAdapterPosition()+"/", Toast.LENGTH_SHORT).show();
+                if(vh.getAdapterPosition()==0){//搜索
+                    ((SupportFragment) getParentFragment()).start(Search.newInstance());
+                }else {
+                    MainActivity main = (MainActivity) getActivity();
+                    main.onHiddenBottombarEvent(true);
+                    ((SupportFragment) getParentFragment()).start(DetailFragment.newInstance(mAdapter.getItem(vh.getAdapterPosition()-1).getTitle()));
+                }
+
             }
         });
 
